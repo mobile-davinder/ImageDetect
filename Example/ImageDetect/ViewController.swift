@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  ImageDetect
 //
-//  Created by Arthur Sahakyan on 03/17/2018.
-//  Copyright (c) 2018 Arthur Sahakyan. All rights reserved.
+//  Created by Davinder on 03/17/2020.
+//  Copyright (c) 2020 Davinder. All rights reserved.
 //
 
 import UIKit
@@ -36,7 +36,7 @@ class ViewController: UIViewController {
         activityIndicator.startAnimating()
         DispatchQueue.global().async {
             // `type` in this method can be face, barcode or text
-            image.detector.crop(type: .face) { result in
+            image.detector.crop(type: .face, padding: 10) { result in
                 DispatchQueue.main.async { [weak self] in
                     switch result {
                     case .success(let croppedImages):

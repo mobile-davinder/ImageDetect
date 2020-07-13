@@ -1,7 +1,5 @@
 use_frameworks!
 
 target 'ImageDetect_Example' do
-  pod 'ImageDetect', :path => '../'
-#  pod 'ImageDetect', :git => 'https://github.com/Feghal/ImageDetect.git'
-#  pod 'ImageDetect'
+    pod 'ImageDetect', :git => 'https://github.com/mobile-davinder/ImageDetect.git'
 end

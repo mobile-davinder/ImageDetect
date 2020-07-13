@@ -15,11 +15,11 @@ Pod::Spec.new do |s|
 ImageDetect is a library developed on Swift. With ImageDetect you can easily detect and crop faces, texts or barcodes in your image with iOS 11 Vision api.
                        DESC
 
-  s.homepage         = 'https://github.com/Feghal/ImageDetect'
+  s.homepage         = 'https://github.com/mobile-davinder/ImageDetect'
   s.summary          = 'Crop faces, inside of your image, with Vision Api'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Arthur Sahakyan' => 'feghaldev@gmail.com' }
-  s.source           = { :git => 'https://github.com/Feghal/ImageDetect.git', :tag => s.version.to_s }
+  s.author           = { 'Davinder Singh' => 'mobile.davinder.11@gmail.com' }
+  s.source           = { :git => 'https://github.com/mobile-davinder/ImageDetect.git', :tag => s.version.to_s }
 
   s.source_files = 'ImageDetect/Classes/**/*'
 

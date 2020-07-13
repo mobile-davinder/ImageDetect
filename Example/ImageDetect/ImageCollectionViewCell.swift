@@ -2,8 +2,8 @@
 //  ImageCollectionViewCell.swift
 //  ImageDetect_Example
 //
-//  Created by Arthur Sahakyan on 3/17/18.
-//  Copyright © 2018 Arthur Sahakyan. All rights reserved.
+//  Created by Davinder on 3/17/20.
+//  Copyright © 2020 Davinder. All rights reserved.
 //
 
 import UIKit

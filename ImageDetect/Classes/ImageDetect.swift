@@ -2,7 +2,7 @@
 //  ImageDetect.swift
 //  ImageDetect
 //
-//  Created by Arthur Sahakyan on 3/17/18.
+//  Created by Davinder on 3/17/20.
 //
 
 import UIKit
@@ -58,19 +58,19 @@ public extension ImageDetect where T: CGImage {
      - parameter type: type of object that must be croped
      - parameter completion: callbeck with `ImageDetectResult<T>` with error or success response
      */
-    func crop(type: DetectionType, completion: @escaping (ImageDetectResult<CGImage>) -> Void) {
+    func crop(type: DetectionType, padding: CGFloat, completion: @escaping (ImageDetectResult<CGImage>) -> Void) {
         switch type {
         case .face:
-            cropFace(completion)
+            cropFace(padding: padding, completion)
         case .barcode:
-            cropBarcode(completion)
+            cropBarcode(padding: padding, completion)
         case .text:
-            cropText(completion)
+            cropText(padding: padding, completion)
             break
         }
     }
     
-    private func cropFace(_ completion: @escaping (ImageDetectResult<CGImage>) -> Void) {
+    private func cropFace(padding: CGFloat, _ completion: @escaping (ImageDetectResult<CGImage>) -> Void) {
         guard #available(iOS 11.0, *) else {
             return
         }
@@ -82,7 +82,7 @@ public extension ImageDetect where T: CGImage {
             
             let faceImages = request.results?.map({ result -> CGImage? in
                 guard let face = result as? VNFaceObservation else { return nil }
-                let faceImage = self.cropImage(object: face)
+                let faceImage = self.cropImage(object: face, padding: padding)
                 return faceImage
             }).compactMap { $0 }
             
@@ -101,7 +101,7 @@ public extension ImageDetect where T: CGImage {
         }
     }
     
-    private func cropBarcode(_ completion: @escaping (ImageDetectResult<CGImage>) -> Void) {
+    private func cropBarcode(padding: CGFloat, _ completion: @escaping (ImageDetectResult<CGImage>) -> Void) {
         guard #available(iOS 11.0, *) else {
             return
         }
@@ -114,7 +114,7 @@ public extension ImageDetect where T: CGImage {
             
             let codeImages = request.results?.map({ result -> CGImage? in
                 guard let code = result as? VNBarcodeObservation else { return nil }
-                let codeImage = self.cropImage(object: code)
+                let codeImage = self.cropImage(object: code, padding: padding)
                 return codeImage
             }).compactMap { $0 }
             
@@ -133,7 +133,7 @@ public extension ImageDetect where T: CGImage {
         }
     }
     
-    private func cropText(_ completion: @escaping (ImageDetectResult<CGImage>) -> Void) {
+    private func cropText(padding: CGFloat, _ completion: @escaping (ImageDetectResult<CGImage>) -> Void) {
         guard #available(iOS 11.0, *) else {
             return
         }
@@ -146,7 +146,7 @@ public extension ImageDetect where T: CGImage {
             
             let textImages = request.results?.map({ result -> CGImage? in
                 guard let text = result as? VNTextObservation else { return nil }
-                let textImage = self.cropImage(object: text)
+                let textImage = self.cropImage(object: text, padding: padding)
                 return textImage
             }).compactMap { $0 }
             
@@ -165,13 +165,13 @@ public extension ImageDetect where T: CGImage {
         }
     }
     
-    private func cropImage(object: VNDetectedObjectObservation) -> CGImage? {
+    private func cropImage(object: VNDetectedObjectObservation, padding: CGFloat) -> CGImage? {
         let width = object.boundingBox.width * CGFloat(self.detectable.width)
         let height = object.boundingBox.height * CGFloat(self.detectable.height)
         let x = object.boundingBox.origin.x * CGFloat(self.detectable.width)
         let y = (1 - object.boundingBox.origin.y) * CGFloat(self.detectable.height) - height
         
-        let croppingRect = CGRect(x: x, y: y, width: width, height: height)
+        let croppingRect = CGRect(x: x, y: y, width: width, height: height).insetBy(dx: padding, dy: padding)
         let image = self.detectable.cropping(to: croppingRect)
         return image
     }
@@ -179,12 +179,12 @@ public extension ImageDetect where T: CGImage {
 
 public extension ImageDetect where T: UIImage {
     
-    func crop(type: DetectionType, completion: @escaping (ImageDetectResult<UIImage>) -> Void) {
+    func crop(type: DetectionType, padding: CGFloat = 0, completion: @escaping (ImageDetectResult<UIImage>) -> Void) {
         guard #available(iOS 11.0, *) else {
             return
         }
         
-        self.detectable.cgImage!.detector.crop(type: type) { result in
+        self.detectable.cgImage!.detector.crop(type: type, padding: padding) { result in
             switch result {
             case .success(let cgImages):
                 let faces = cgImages.map { cgImage -> UIImage in
